@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="google-site-verification" content="akNb3qszGhXI7epdX00WsuVC8OckKaWKNo-Li2FeJKM" />
+
+    <title>Laurea - Aula
+    </title>
+
+    <!-- Styles -->
+    <link href="css/page.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon&quot; href=&quot;img/apple-touch-icon.png">
+    <link rel="icon" href="img/favicon.png">
+</head>
+
+<body>
+
+    <main>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light navbar-stick-dark" data-navbar="smart">
+            <div class="container">
+
+                <div class="navbar-left mr-4">
+                    <button class="navbar-toggler text-white" type="button">&#9776;</button>
+                </div>
+
+                <section class="navbar-mobile">
+                                <h3 class="text-success">Laurea <i class="fab fa-pagelines text-success"></i></h3>
+            </a>
+                    <nav class="nav nav-navbar mr-auto">
+                        <a class="nav-link active" href="index.html">Aula</a>
+                    </nav>
+                </section>
+
+
+            </div>
+        </nav>
+        <!-- /.navbar -->
+
+
+        <!-- Header -->
+        <header class="header text-white" style="background-color: #4f407b" data-overlay="1">
+            <div class="container text-center">
+
+                <div class="row">
+                    <div class="col-md-8 mx-auto">
+      
+                        <h1 class="text-white">Aula <span class="text-success">Laurea <i class="fab fa-pagelines text-success"></i></span></h1>
+
+                    </div>
+                </div>
+
+            </div>
+        </header><!-- /.header -->
+
+
+        <section class="section">
+
+            <div class="container-fluid">
+                <header class="section-header">
+                    <span class="iconbox iconbox-outline iconbox-xl"><i
+                            class="fas fa-check-square text-success"></i></span>
+                    <br>
+                    <br>
+                    <h2>Registre a sua presença.</h2>
+                    <hr>
+                    <p class="lead">Sua presença será armazenada no Blockchain.</p>
+                </header>
+
+                <div id="registro" class="row">
+                    <form action="#" method="POST" name="formRegistro" id="formRegistro" class="col-11 col-md-6 col-xl-5 bg-light mx-auto section-dialog p-5 p-md-7">
+                        <fieldset disabled>
+                            <div class="form-group input-group input-group-lg">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light"><i class="fas fa-award fa-fw"></i></span>
+                                </div>
+                                <input type="text" id="courseID" class="form-control bg-light"
+                                    placeholder="Programação de Smart Contracts" value="Programação de Smart Contracts">
+                            </div>
+                        </fieldset>
+
+                        <div class="form-group input-group input-group-lg">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-chalkboard-teacher fa-fw"></i></span>
+                            </div>
+                            <input type="number" name="classID" id="classID" class="form-control" placeholder="Aula">
+                        </div>
+
+                        <div class="form-group input-group input-group-lg">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user-graduate fa-fw"></i></span>
+                            </div>
+                            <input type="number" name="AlunoID" id="AlunoID" class="form-control" placeholder="Aluno">
+                        </div>
+
+                        <div class="form-group input-group input-group-lg">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-key fa-fw"></i></span>
+                            </div>
+                            <input type="number" name="_password" id="_password" class="form-control" placeholder="Senha">
+                        </div>
+
+                        <button onclick="registrarPresenca()" class="btn btn-block btn-lg btn-success">Registrar</button>
+
+                    </form>
+                </div>
+                <br>
+                <h4 class="text-center">Status do Registro</h4>
+                <br>
+                <div id="statusTransacao">&nbsp;</div>
+                <br>
+                <br>
+            </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer py-7">
+        <div class="container text-center">
+
+            <h3 class="text-success">Laurea <i class="fab fa-pagelines text-success"></i></h3>
+
+            <small>© Laurea 2019, All rights reserved.</small>
+            <br>
+
+        </div>
+    </footer><!-- /.footer -->
+
+    <!-- Scroll top -->
+    <button class="btn btn-circle btn-success scroll-top"><i class="fa fa-angle-up"></i></button>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Scripts -->
+    <script src="js/page.min.js"></script>
+    <script src="js/script.js"></script>
+
+    <!-- Smart Contract Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="connectToSmartContract.js"></script>
+    <script src="abi.js"></script>
+    <script>
+        var frmRegistro = document.formRegistro;
+        function registrarPresenca() {
+            event.preventDefault();
+            $("#statusTransacao").html("&nbsp;");
+            contract.registerAttendance(frmRegistro.studentID.value, frmRegistro.classID.value, frmRegistro._password.value, {from: web3.eth.accounts[0], gas: 3000000, value: 0}, function (erro, resultado) {
+                if (erro) {
+                    console.log("registrarPresença");
+                    console.error(erro);
+                    alert("Houve um erro ao registrar a sua presença, tente novamente.");
+                    return
+                }
+                waitForTxToBeMined(resultado, "#statusTransacao");
+            })
+        }
+    </script>
+
+</body>
+
+</html>
