@@ -83,30 +83,38 @@
 
                         <div class="form-group input-group input-group-lg">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-chalkboard-teacher fa-fw mr-3"></i></span>
+                                <span class="input-group-text"><i class="fas fa-chalkboard-teacher fa-fw mr-2"></i></span>
                             </div>
-                         <select type="number" name="classID" id="classID" class="form-control" placeholder="Select input">
-                            <option value="0">Aula 01</option>
-                            <option value="1">Aula 02</option>
-                            <option value="2">Aula 03</option>
-                            <option value="3">Aula 04</option>
-                            <option value="4">Aula 05</option>
-                            <option value="5">Aula 06</option>
-                            <option value="6">Aula 07</option>
-                            <option value="7">Aula 08</option>
-                            <option value="8">Aula 09</option>
-                            <option value="9">Aula 10</option>
-                            <option value="10">Aula 11</option>
-                            <option value="11">Aula 12</option>
-                            <option value="12">Aula 13</option>
-                            <option value="13">Aula 14</option>
-                            <option value="14">Aula 15</option>
-                            <option value="15">Aula 16</option>
-                            <option value="16">Aula 17</option>
-                            <option value="17">Aula 18</option>
-                            <option value="18">Aula 19</option>
-                            <option value="19">Aula 20</option>
-                        </select>
+                             <select type="number" name="classID" id="classID" class="form-control" placeholder="Select input">
+                                <option value="0">Aula 01</option>
+                                <option value="1">Aula 02</option>
+                                <option value="2">Aula 03</option>
+                                <option value="3">Aula 04</option>
+                                <option value="4">Aula 05</option>
+                                <option value="5">Aula 06</option>
+                                <option value="6">Aula 07</option>
+                                <option value="7">Aula 08</option>
+                                <option value="8">Aula 09</option>
+                                <option value="9">Aula 10</option>
+                                <option value="10">Aula 11</option>
+                                <option value="11">Aula 12</option>
+                                <option value="12">Aula 13</option>
+                                <option value="13">Aula 14</option>
+                                <option value="14">Aula 15</option>
+                                <option value="15">Aula 16</option>
+                                <option value="16">Aula 17</option>
+                                <option value="17">Aula 18</option>
+                                <option value="18">Aula 19</option>
+                                <option value="19">Aula 20</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group input-group input-group-lg">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user-graduate fa-fw"></i></span>
+                            </div>
+                            <input type="number" name="studentID" id="studentID" class="form-control"
+                                placeholder="Número do Aluno">
                         </div>
 
                         <div class="form-group input-group input-group-lg">
@@ -169,12 +177,12 @@
     <script>
         
         var frmRegistro = document.formRegistro;
-        var studentWallet = web3.eth.accounts[0];
+        //var studentWallet = web3.eth.accounts[0];
 
         function registerAttendance() {
             event.preventDefault();
             $("#statusTransacao").html("&nbsp;");
-            contract.registerAttendance(studentWallet.value, frmRegistro.classID.value, frmRegistro._password.value, { from: web3.eth.accounts[0], gas: 3000000, value: 0 }, function (erro, resultado) {
+            contract.registerAttendance(frmRegistro.studentID.value, frmRegistro.classID.value, frmRegistro._password.value, { from: web3.eth.accounts[0], gas: 3000000, value: 0 }, function (erro, resultado) {
                 if (erro) {
                     console.log("registerAttendance");
                     console.error(erro);
