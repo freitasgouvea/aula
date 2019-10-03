@@ -34,8 +34,8 @@
                 </div>
 
                 <section class="navbar-mobile">
-                                <h3 class="text-success">Laurea <i class="fab fa-pagelines text-success"></i></h3>
-            </a>
+                    <h3 class="text-success">Laurea <i class="fab fa-pagelines text-success"></i></h3>
+                    </a>
                     <nav class="nav nav-navbar mr-auto">
                         <a class="nav-link active" href="index.html">Aula</a>
                     </nav>
@@ -53,8 +53,9 @@
 
                 <div class="row">
                     <div class="col-md-8 mx-auto">
-      
-                        <h1 class="text-white">Aula <span class="text-success">Laurea <i class="fab fa-pagelines text-success"></i></span></h1>
+
+                        <h1 class="text-white">Aula <span class="text-success">Laurea <i
+                                    class="fab fa-pagelines text-success"></i></span></h1>
 
                     </div>
                 </div>
@@ -77,8 +78,9 @@
                 </header>
 
                 <div id="registro" class="row">
-                    <form action="#" method="get" name="formRegistro" id="formRegistro" class="col-11 col-md-6 col-xl-5 bg-light mx-auto section-dialog p-5 p-md-7">
-                        <p class="lead-3 text-center"><i class="fas fa-award fa-fw"></i>  Curso de Smart Contracts</p>
+                    <form action="#" method="get" name="formRegistro" id="formRegistro"
+                        class="col-11 col-md-6 col-xl-5 bg-light mx-auto section-dialog p-5 p-md-7">
+                        <p class="lead-3 text-center"><i class="fas fa-award fa-fw"></i> Curso de Smart Contracts</p>
                         <div class="form-group input-group input-group-lg">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-chalkboard-teacher fa-fw"></i></span>
@@ -97,10 +99,12 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-key fa-fw"></i></span>
                             </div>
-                            <input type="number" name="_password" id="_password" class="form-control" placeholder="Senha">
+                            <input type="number" name="_password" id="_password" class="form-control"
+                                placeholder="Senha">
                         </div>
 
-                        <button type="button" onclick="registerAttendance()" class="btn btn-block btn-lg btn-success">Registrar</button>
+                        <button type="button" onclick="registerAttendance()"
+                            class="btn btn-block btn-lg btn-success">Registrar</button>
 
                     </form>
                 </div>
@@ -155,9 +159,9 @@
         function registerAttendance() {
             event.preventDefault();
             $("#statusTransacao").html("&nbsp;");
-            contract.registerAttendance(frmRegistro.studentID.value, frmRegistro.classID.value, frmRegistro._password.value, {from: web3.eth.accounts[0], gas: 3000000, value: 0}, function (erro, resultado) {
+            contract.registerAttendance(frmRegistro.studentID.value, frmRegistro.classID.value, frmRegistro._password.value, { from: web3.eth.accounts[0], gas: 3000000, value: 0 }, function (erro, resultado) {
                 if (erro) {
-                    console.log("registrarPresença");
+                    console.log("registerAttendance");
                     console.error(erro);
                     alert("Houve um erro ao registrar a sua presença, tente novamente.");
                     return
