@@ -14,6 +14,9 @@ contract LaureaCourse {
     uint256 totalOfClasses;
     uint256 minimumAchievement;
     uint256 numberOfStudents;
+    uint256 classesCreated;
+    uint256 classesFinished;
+    uint256 studentsLaurated;
     bool laureated;
     
     Student[] students;
@@ -41,9 +44,11 @@ contract LaureaCourse {
     }
     
     event ClassCreated(uint256 indexed classID, string indexed className);
+    event ClassEdited(uint256 indexed classID, string indexed className);
     event ClassOpened(uint256 indexed classID, uint256 now);
     event ClassClosed(uint256 indexed classID, uint256 now);
     event StudentCreated(uint256 indexed studentID, uint256 indexed nationalID, string indexed studentName);
+    event StudentEdited(uint256 indexed studentID, uint256 indexed nationalID, string indexed studentName);
     event AttendanceRegistered(uint256 indexed studentID, uint256 indexed classID, uint256 now);
     event AttendanceDeleted(uint256 indexed studentID, uint256 indexed classID, uint256 now);
     event StudentLaurated(string indexed courseName, uint256 indexed nationalID, uint256 now);
@@ -88,7 +93,28 @@ contract LaureaCourse {
         require (msg.sender == schoolWallet);
         Class memory c = Class(_className, _professorName, _classDate, _classHours, _password, 0, false);
         classes.push(c);
+        classesCreated ++;
         emit ClassCreated(classes.length-1, _className);
+        return true;
+    }
+    
+    function editClass (
+        uint256 classID,
+        string memory _className,
+        string memory _professorName,
+        uint256 _classDate,
+        uint256 _classHours, 
+        uint256 _password
+        ) public returns (bool)
+    {
+        require (msg.sender == schoolWallet);
+        Class storage c = classes[classID];
+        c.className = _className;
+        c.professorName = _professorName;
+        c.classDate = _classDate;
+        c.classHours = _classHours;
+        c.password = _password;
+        emit ClassEdited(classID, _className);
         return true;
     }
     
@@ -106,6 +132,22 @@ contract LaureaCourse {
         return true;
     }
     
+    function editStudent (
+        uint256 studentID,
+        address _studentWallet,
+        string memory _studentName,
+        uint256 _nationalID
+        ) public returns (bool)
+    {
+        require (msg.sender == schoolWallet);
+        Student storage s = students[studentID];
+        s.studentWallet = _studentWallet;
+        s.studentName = _studentName;
+        s.nationalID = _nationalID;
+        emit StudentEdited(studentID, _nationalID, _studentName);
+        return true;
+    }
+    
     function openClass (uint256 classID) public returns(bool) {
         require (msg.sender == schoolWallet);
         classes[classID].active = true;
@@ -116,6 +158,7 @@ contract LaureaCourse {
     function closeClass (uint256 classID) public returns(bool) {
         require (msg.sender == schoolWallet);
         classes[classID].active = false;
+        classesFinished ++;
         emit ClassClosed(classID, now);
         return true;
     }
@@ -144,7 +187,7 @@ contract LaureaCourse {
         return true;
     }
     
-    function deleteAttendanceForAStudent (uint256 studentID, uint256 classID) public returns(bool) {
+    function deleteAttendance (uint256 studentID, uint256 classID) public returns(bool) {
         require (msg.sender == schoolWallet);
         students[studentID].numberOfClasses -= 1;
         //classes.listaDePresenca.push = students[studentID].studentWallet;
@@ -164,6 +207,7 @@ contract LaureaCourse {
             if(students[students.length-1].numberOfClasses >= minimumAchievement){
                 students[students.length-1].evaluation = "Aprovado";
                 students[students.length-1].laurated = true;
+                studentsLaurated ++;
                 emit StudentLaurated(courseName, students[students.length-1].nationalID , now);
                 return true;
             }
@@ -171,10 +215,14 @@ contract LaureaCourse {
         laureated = true;
     }
     
-    function showDetails() public view returns (string memory, string memory, string memory, string memory, string memory, uint256, uint256, uint256, uint256) {
-        return(courseName, coordinatorName, local, startDate, finishDate, amountOfHours, totalOfClasses, minimumAchievement, numberOfStudents);
+    function showDetails() public view returns (string memory, string memory, string memory, string memory, string memory, uint256, uint256, uint256) {
+        return(courseName, coordinatorName, local, startDate, finishDate, amountOfHours, totalOfClasses, minimumAchievement);
     }
     
+    function showStatus() public view returns (uint256, uint256, uint256, uint256 ) {
+        return(numberOfStudents, classesCreated, classesFinished, studentsLaurated);
+    }
+        
     function showStudent(uint256 studentID) public view returns (address, string memory, uint256, uint256, string memory, bool, bool) {
         Student memory s = students[studentID];
         return(s.studentWallet, s.studentName, s.nationalID, s.numberOfClasses, s.evaluation, s.active, s.laurated);
