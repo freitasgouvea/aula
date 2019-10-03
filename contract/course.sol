@@ -6,7 +6,6 @@ contract LaureaCourse {
     string schoolName;
     string principalName;
     string courseName;
-    string courseID;
     string coordinatorName;
     string local;
     string startDate;
@@ -15,11 +14,12 @@ contract LaureaCourse {
     uint256 totalOfClasses;
     uint256 minimumAchievement;
     uint256 numberOfStudents;
-    bool open;
     bool laureated;
     
     Student[] students;
     Class[] classes;
+    
+    mapping(address => Student) public studentList;
     
     struct Student {
         address studentWallet;
@@ -46,16 +46,14 @@ contract LaureaCourse {
     event ClassOpened(uint256 indexed classID, uint256 now);
     event ClassClosed(uint256 indexed classID, uint256 now);
     event StudentCreated(uint256 indexed studentID, uint256 indexed nationalID, string indexed studentName);
-    event AttendanceRegistered(uint256 indexed studentID, uint256 indexed classID, uint256 now);
-    event AttendanceDeleted(uint256 indexed studentID, uint256 indexed classID, uint256 now);
+    event AttendanceRegistered(address indexed studentWallet, uint256 indexed classID, uint256 now);
+    event AttendanceDeleted(address indexed studentWallet, uint256 indexed classID, uint256 now);
     event StudentLaurated(string indexed courseName, uint256 indexed nationalID, uint256 now);
     
-    constructor(string memory _schoolName, string memory _principalName, string memory _courseID) public {
+    constructor(string memory _schoolName, string memory _principalName ) public {
         schoolWallet = msg.sender;
         schoolName = _schoolName;
         principalName = _principalName;
-        courseID = _courseID;
-        open = true;
         laureated = false;
     }
     
@@ -124,8 +122,8 @@ contract LaureaCourse {
         return true;
     }
     
-    function registerAttendance (uint256 studentID, uint256 classID, uint256 _password) public returns(bool) {
-        require (msg.sender == students[studentID].studentWallet);
+    function registerAttendance (address studentWallet, uint256 classID, uint256 _password) public returns(bool) {
+        require (msg.sender == studentList[studentWallet].studentWallet);
         require (classes[classID].active == true);
         require (classes[classID].password == _password);
         Class storage c = classes[classID];
@@ -134,8 +132,8 @@ contract LaureaCourse {
             //}
         //c.listOfStudents[c.studentsInClass++] = Student({addr: msg.sender});
         c.studentsInClass ++;
-        students[studentID].numberOfClasses ++;
-        emit AttendanceRegistered(studentID, classID, now);
+        studentList[studentWallet].numberOfClasses ++;
+        emit AttendanceRegistered(studentWallet, classID, now);
         return true;
     }
     
@@ -144,7 +142,7 @@ contract LaureaCourse {
         require (classes[classID].active == true);
         students[studentID].numberOfClasses ++;
         //classes.listaDePresenca.push = students[studentID].studentWallet;
-        emit AttendanceRegistered(studentID, classID, now);
+        emit AttendanceRegistered(students[studentID].studentWallet, classID, now);
         return true;
     }
     
@@ -154,7 +152,7 @@ contract LaureaCourse {
         //classes.listaDePresenca.push = students[studentID].studentWallet;
         Class storage c = classes[classID];
         c.studentsInClass -= 1;
-        emit AttendanceDeleted(studentID, classID, now);
+        emit AttendanceDeleted(students[studentID].studentWallet, classID, now);
         return true;
     }
     
@@ -172,7 +170,6 @@ contract LaureaCourse {
                 return true;
             }
         }
-        open = true;
         laureated = true;
     }
     
@@ -188,6 +185,11 @@ contract LaureaCourse {
     function showClass(uint256 classID) public view returns (string memory, string memory, uint256, uint256, uint256, uint256, bool) {
         Class memory c = classes[classID];
         return(c.className, c.professorName, c.classDate, c.classHours, c.password, c.studentsInClass, c.active);
-        
+    }
+    
+    function studentStatus(address studentWallet) public view returns (address, string memory, uint256, uint256, string memory, bool, bool) {
+        require (msg.sender == studentList[studentWallet].studentWallet);
+        Student memory s = studentList[studentWallet];
+        return(s.studentWallet, s.studentName, s.nationalID, s.numberOfClasses, s.evaluation, s.active, s.laurated);
     }
 }
