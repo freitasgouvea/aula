@@ -1,66 +1,45 @@
 const contractABI = [
 	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_className",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_professorName",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_classDate",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_classHours",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_password",
-				"type": "uint256"
-			}
-		],
-		"name": "addClass",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
+		"constant": true,
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_studentWallet",
+				"name": "studentWallet",
+				"type": "address"
+			}
+		],
+		"name": "studentStatus",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
 				"type": "address"
 			},
 			{
 				"internalType": "string",
-				"name": "_studentName",
+				"name": "",
 				"type": "string"
 			},
 			{
 				"internalType": "uint256",
-				"name": "_nationalID",
+				"name": "",
 				"type": "uint256"
-			}
-		],
-		"name": "addStudent",
-		"outputs": [
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			},
 			{
 				"internalType": "bool",
 				"name": "",
@@ -68,7 +47,7 @@ const contractABI = [
 			}
 		],
 		"payable": false,
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -93,20 +72,66 @@ const contractABI = [
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"constant": true,
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "studentList",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "studentWallet",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "studentName",
+				"type": "string"
+			},
+			{
 				"internalType": "uint256",
-				"name": "studentID",
+				"name": "nationalID",
 				"type": "uint256"
 			},
+			{
+				"internalType": "uint256",
+				"name": "numberOfClasses",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "evaluation",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "active",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "laurated",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
 			{
 				"internalType": "uint256",
 				"name": "classID",
 				"type": "uint256"
 			}
 		],
-		"name": "deleteAttendanceForAStudent",
+		"name": "openClass",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -188,11 +213,16 @@ const contractABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
+				"name": "studentID",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
 				"name": "classID",
 				"type": "uint256"
 			}
 		],
-		"name": "openClass",
+		"name": "registerAttendanceForAStudent",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -208,9 +238,9 @@ const contractABI = [
 		"constant": false,
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "studentID",
-				"type": "uint256"
+				"internalType": "address",
+				"name": "studentWallet",
+				"type": "address"
 			},
 			{
 				"internalType": "uint256",
@@ -239,6 +269,102 @@ const contractABI = [
 		"constant": false,
 		"inputs": [
 			{
+				"internalType": "string",
+				"name": "_className",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_professorName",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_classDate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_classHours",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_password",
+				"type": "uint256"
+			}
+		],
+		"name": "addClass",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "showDetails",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "studentID",
 				"type": "uint256"
@@ -249,7 +375,140 @@ const contractABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "registerAttendanceForAStudent",
+		"name": "deleteAttendanceForAStudent",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "studentID",
+				"type": "uint256"
+			}
+		],
+		"name": "showStudent",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "classID",
+				"type": "uint256"
+			}
+		],
+		"name": "showClass",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_studentWallet",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_studentName",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_nationalID",
+				"type": "uint256"
+			}
+		],
+		"name": "addStudent",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -271,11 +530,6 @@ const contractABI = [
 			{
 				"internalType": "string",
 				"name": "_principalName",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_courseID",
 				"type": "string"
 			}
 		],
@@ -370,9 +624,9 @@ const contractABI = [
 		"inputs": [
 			{
 				"indexed": true,
-				"internalType": "uint256",
-				"name": "studentID",
-				"type": "uint256"
+				"internalType": "address",
+				"name": "studentWallet",
+				"type": "address"
 			},
 			{
 				"indexed": true,
@@ -395,9 +649,9 @@ const contractABI = [
 		"inputs": [
 			{
 				"indexed": true,
-				"internalType": "uint256",
-				"name": "studentID",
-				"type": "uint256"
+				"internalType": "address",
+				"name": "studentWallet",
+				"type": "address"
 			},
 			{
 				"indexed": true,
@@ -439,170 +693,13 @@ const contractABI = [
 		],
 		"name": "StudentLaurated",
 		"type": "event"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "classID",
-				"type": "uint256"
-			}
-		],
-		"name": "showClass",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "showDetails",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "studentID",
-				"type": "uint256"
-			}
-		],
-		"name": "showStudent",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			},
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			},
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
 	}
 ]
 
 if (network === "4") {
-    contractAddress = "0xEA984dE13e7002D14578a6C356029F59EA5ee1E9"; 
+    contractAddress = "0xD2d98049Ab8cb5d59CcC96beb44e703aBFE4834C"; 
 } else {
-    contractAddress = "0xEA984dE13e7002D14578a6C356029F59EA5ee1E9"; 
+    contractAddress = "0xD2d98049Ab8cb5d59CcC96beb44e703aBFE4834C"; 
 }
 
 contract = web3.eth.contract(contractABI).at(contractAddress);
