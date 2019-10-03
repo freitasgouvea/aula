@@ -171,13 +171,11 @@
     <script>
         
         var frmRegistro = document.formRegistro;
-
-        var studentWallet = {from: web3.eth.accounts[0]};
-
+        var tx = {from: web3.eth.accounts[0]};
         function registerAttendance() {
             event.preventDefault();
             $("#statusTransacao").html("&nbsp;");
-            contract.registerAttendance(frmRegistro.studentWallet.value, frmRegistro.classID.value, frmRegistro._password.value, { from: web3.eth.accounts[0], gas: 3000000, value: 0 }, function (erro, resultado) {
+            contract.registerAttendance(frmRegistro.tx.value, frmRegistro.classID.value, frmRegistro._password.value, { from: web3.eth.accounts[0], gas: 3000000, value: 0 }, function (erro, resultado) {
                 if (erro) {
                     console.log("registerAttendance");
                     console.error(erro);
