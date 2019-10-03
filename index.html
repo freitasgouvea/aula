@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="keywords" content="">
-    <meta name="google-site-verification" content="akNb3qszGhXI7epdX00WsuVC8OckKaWKNo-Li2FeJKM" />
 
     <title>Laurea - Aula
     </title>
@@ -79,29 +78,29 @@
 
                 <div id="registro" class="row">
                     <form action="#" method="POST" name="formRegistro" id="formRegistro" class="col-11 col-md-6 col-xl-5 bg-light mx-auto section-dialog p-5 p-md-7">
-
+                        <p class="lead-3 text-center"><i class="fas fa-award fa-fw"></i>  Curso de Smart Contracts</p>
                         <div class="form-group input-group input-group-lg">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-chalkboard-teacher fa-fw"></i></span>
                             </div>
-                            <input type="number" name="classID" id="classID" class="form-control" placeholder="Aula">
+                            <input type="number" name="classID" id="classID" class="form-control" placeholder="Aula" value="">
                         </div>
 
                         <div class="form-group input-group input-group-lg">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user-graduate fa-fw"></i></span>
                             </div>
-                            <input type="number" name="AlunoID" id="AlunoID" class="form-control" placeholder="Aluno">
+                            <input type="number" name="AlunoID" id="AlunoID" class="form-control" placeholder="Aluno" value="">
                         </div>
 
                         <div class="form-group input-group input-group-lg">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-key fa-fw"></i></span>
                             </div>
-                            <input type="number" name="_password" id="_password" class="form-control" placeholder="Senha">
+                            <input type="number" name="_password" id="_password" class="form-control" placeholder="Senha" value="">
                         </div>
 
-                        <button onclick="registrarPresenca()" class="btn btn-block btn-lg btn-success">Registrar</button>
+                        <button onclick="registerAttendance()" class="btn btn-block btn-lg btn-success">Registrar</button>
 
                     </form>
                 </div>
@@ -153,7 +152,7 @@
     <script src="abi.js"></script>
     <script>
         var frmRegistro = document.formRegistro;
-        function registrarPresenca() {
+        function registerAttendance() {
             event.preventDefault();
             $("#statusTransacao").html("&nbsp;");
             contract.registerAttendance(frmRegistro.studentID.value, frmRegistro.classID.value, frmRegistro._password.value, {from: web3.eth.accounts[0], gas: 3000000, value: 0}, function (erro, resultado) {
