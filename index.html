@@ -140,12 +140,10 @@
     <!-- Footer -->
     <footer class="footer py-7">
         <div class="container text-center">
-
             <br>
             <h3 class="text-success">Laurea <i class="fab fa-pagelines text-success"></i></h3>
             <small>© Laurea 2019, All rights reserved.</small>
             <br>
-
         </div>
     </footer><!-- /.footer -->
 
@@ -171,7 +169,8 @@
     <script>
         
         var frmRegistro = document.formRegistro;
-        var studentWallet = {from: web3.eth.accounts[0]};
+        var studentWallet = web3.eth.accounts[0];
+
         function registerAttendance() {
             event.preventDefault();
             $("#statusTransacao").html("&nbsp;");
