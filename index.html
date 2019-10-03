@@ -7,8 +7,7 @@
     <meta name="description" content="">
     <meta name="keywords" content="">
 
-    <title>Laurea - Aula
-    </title>
+    <title>Laurea - Aula</title>
 
     <!-- Styles -->
     <link href="css/page.min.css" rel="stylesheet">
@@ -80,19 +79,34 @@
                 <div id="registro" class="row">
                     <form action="#" method="get" name="formRegistro" id="formRegistro"
                         class="col-11 col-md-6 col-xl-5 bg-light mx-auto section-dialog p-5 p-md-7">
-                        <p class="lead-3 text-center"><i class="fas fa-award fa-fw"></i> Curso de Smart Contracts</p>
-                        <div class="form-group input-group input-group-lg">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-chalkboard-teacher fa-fw"></i></span>
-                            </div>
-                            <input type="number" name="classID" id="classID" class="form-control" placeholder="Aula">
-                        </div>
+                        <p class="lead-2 mx-4"><i class="fas fa-award fa-fw mr-3"></i> Curso de Smart Contracts</p>
 
                         <div class="form-group input-group input-group-lg">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-user-graduate fa-fw"></i></span>
+                                <span class="input-group-text"><i class="fas fa-chalkboard-teacher fa-fw mr-3"></i></span>
                             </div>
-                            <input type="number" name="studentID" id="studentID" class="form-control" placeholder="Aluno">
+                         <select type="number" name="classID" id="classID" class="form-control" placeholder="Select input">
+                            <option value="0">Aula 01</option>
+                            <option value="1">Aula 02</option>
+                            <option value="2">Aula 03</option>
+                            <option value="3">Aula 04</option>
+                            <option value="4">Aula 05</option>
+                            <option value="5">Aula 06</option>
+                            <option value="6">Aula 07</option>
+                            <option value="7">Aula 08</option>
+                            <option value="8">Aula 09</option>
+                            <option value="9">Aula 10</option>
+                            <option value="10">Aula 11</option>
+                            <option value="11">Aula 12</option>
+                            <option value="12">Aula 13</option>
+                            <option value="13">Aula 14</option>
+                            <option value="14">Aula 15</option>
+                            <option value="15">Aula 16</option>
+                            <option value="16">Aula 17</option>
+                            <option value="17">Aula 18</option>
+                            <option value="18">Aula 19</option>
+                            <option value="19">Aula 20</option>
+                        </select>
                         </div>
 
                         <div class="form-group input-group input-group-lg">
@@ -100,7 +114,7 @@
                                 <span class="input-group-text"><i class="fas fa-key fa-fw"></i></span>
                             </div>
                             <input type="number" name="_password" id="_password" class="form-control"
-                                placeholder="Senha">
+                                placeholder="Senha da Aula">
                         </div>
 
                         <button type="button" onclick="registerAttendance()"
@@ -127,8 +141,8 @@
     <footer class="footer py-7">
         <div class="container text-center">
 
+            <br>
             <h3 class="text-success">Laurea <i class="fab fa-pagelines text-success"></i></h3>
-
             <small>© Laurea 2019, All rights reserved.</small>
             <br>
 
@@ -155,11 +169,15 @@
     <script src="connectToSmartContract.js"></script>
     <script src="abi.js"></script>
     <script>
+        
         var frmRegistro = document.formRegistro;
+
+        var studentWallet = {from: web3.eth.accounts[0]};
+
         function registerAttendance() {
             event.preventDefault();
             $("#statusTransacao").html("&nbsp;");
-            contract.registerAttendance(frmRegistro.studentID.value, frmRegistro.classID.value, frmRegistro._password.value, { from: web3.eth.accounts[0], gas: 3000000, value: 0 }, function (erro, resultado) {
+            contract.registerAttendance(frmRegistro.studentWallet.value, frmRegistro.classID.value, frmRegistro._password.value, { from: web3.eth.accounts[0], gas: 3000000, value: 0 }, function (erro, resultado) {
                 if (erro) {
                     console.log("registerAttendance");
                     console.error(erro);
@@ -169,6 +187,7 @@
                 waitForTxToBeMined(resultado, "#statusTransacao");
             })
         }
+
     </script>
 
 </body>
