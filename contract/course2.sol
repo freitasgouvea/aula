@@ -14,15 +14,18 @@ contract LaureaCourse {
     uint256 totalOfClasses;
     uint256 minimumAchievement;
     uint256 numberOfStudents;
+    uint256 classesCreated;
+    uint256 classesFinished;
+    uint256 studentsLaurated;
     bool laureated;
     
-    Student[] students;
+    Student [] studentsList;
     Class[] classes;
-    
-    mapping(address => Student) public studentList;
-    
+    mapping(address => Student) students;
+    //address [] private studentIndex;
+
     struct Student {
-        address studentWallet;
+        address studentAddress;
         string studentName;
         uint256 nationalID;
         uint256 numberOfClasses;
@@ -39,16 +42,18 @@ contract LaureaCourse {
         uint256 password;
         uint256 studentsInClass;
         bool active;
-        //mapping (uint => Student) listOfStudents;
+        mapping (address => Student) attendanceList;
     }
     
     event ClassCreated(uint256 indexed classID, string indexed className);
+    event ClassEdited(uint256 indexed classID, string indexed className);
     event ClassOpened(uint256 indexed classID, uint256 now);
     event ClassClosed(uint256 indexed classID, uint256 now);
-    event StudentCreated(uint256 indexed studentID, uint256 indexed nationalID, string indexed studentName);
-    event AttendanceRegistered(address indexed studentWallet, uint256 indexed classID, uint256 now);
-    event AttendanceDeleted(address indexed studentWallet, uint256 indexed classID, uint256 now);
-    event StudentLaurated(string indexed courseName, uint256 indexed nationalID, uint256 now);
+    event StudentCreated(address indexed studentAddress, uint256 indexed nationalID, string indexed studentName);
+    event StudentEdited(address indexed studentAddress, uint256 indexed nationalID, string indexed studentName);
+    event AttendanceRegistered(address indexed studentAddress, uint256 indexed classID, uint256 now);
+    event AttendanceDeleted(address indexed studentAddress, uint256 indexed classID, uint256 now);
+    event StudentLaurated(address indexed studentAddress, string indexed courseName, uint256 indexed nationalID, uint256 now);
     
     constructor(string memory _schoolName, string memory _principalName ) public {
         schoolWallet = msg.sender;
@@ -90,21 +95,79 @@ contract LaureaCourse {
         require (msg.sender == schoolWallet);
         Class memory c = Class(_className, _professorName, _classDate, _classHours, _password, 0, false);
         classes.push(c);
+        classesCreated ++;
         emit ClassCreated(classes.length-1, _className);
         return true;
     }
     
+    function editClass (
+        uint256 classID,
+        string memory _className,
+        string memory _professorName,
+        uint256 _classDate,
+        uint256 _classHours, 
+        uint256 _password
+        ) public returns (bool)
+    {
+        require (msg.sender == schoolWallet);
+        Class storage c = classes[classID];
+        c.className = _className;
+        c.professorName = _professorName;
+        c.classDate = _classDate;
+        c.classHours = _classHours;
+        c.password = _password;
+        emit ClassEdited(classID, _className);
+        return true;
+    }
+    
     function addStudent (
-        address _studentWallet,
+        address _studentAddress,
         string memory _studentName,
         uint256 _nationalID
         ) public returns (bool)
     {
         require (msg.sender == schoolWallet);
-        Student memory s = Student( _studentWallet, _studentName, _nationalID, 0, "0", true, false);
-        students.push(s);
+        students[_studentAddress].studentAddress = _studentAddress;
+        students[_studentAddress].studentName = _studentName;
+        students[_studentAddress].nationalID = _nationalID;
+        students[_studentAddress].numberOfClasses = 0;
+        students[_studentAddress].evaluation = "Curso em Andamento";
+        students[_studentAddress].active = true;
+        students[_studentAddress].laurated = false;
         numberOfStudents ++;
-        emit StudentCreated(students.length-1, _nationalID, _studentName);
+        emit StudentCreated(_studentAddress , _nationalID, _studentName);
+        return true;
+    }
+    
+    
+    function editStudent (
+        address studentAddress,
+        address _studentAddress,
+        string memory _studentName,
+        uint256 _nationalID
+        ) public returns (bool)
+    {
+        require (msg.sender == schoolWallet);
+        students[studentAddress].studentAddress = _studentAddress;
+        students[studentAddress].studentName = _studentName;
+        students[studentAddress].nationalID = _nationalID;
+        emit StudentEdited(_studentAddress, _nationalID, _studentName);
+        return true;
+    }
+    
+    function disableStudent(address studentAddress) public returns (bool)
+    {
+        require (msg.sender == schoolWallet);
+        students[studentAddress].active = false;
+        numberOfStudents = numberOfStudents - 1;
+        return true;
+    }
+    
+    function enableStudent(address studentAddress) public returns (bool)
+    {
+        require (msg.sender == schoolWallet);
+        students[studentAddress].active = true;
+        numberOfStudents ++;
         return true;
     }
     
@@ -118,78 +181,79 @@ contract LaureaCourse {
     function closeClass (uint256 classID) public returns(bool) {
         require (msg.sender == schoolWallet);
         classes[classID].active = false;
+        classesFinished ++;
         emit ClassClosed(classID, now);
         return true;
     }
     
-    function registerAttendance (address studentWallet, uint256 classID, uint256 _password) public returns(bool) {
-        require (msg.sender == studentList[studentWallet].studentWallet);
+    function registerAttendance (address studentAddress, uint256 classID, uint256 _password) public returns(bool) {
+        require (msg.sender == students[studentAddress].studentAddress);
         require (classes[classID].active == true);
         require (classes[classID].password == _password);
         Class storage c = classes[classID];
-        //if(students[studentID] = classes[classID].listaDePresenca) {
+        //if(students[studentAddress] = classes[classID].listaDePresenca) {
                 //return false;
             //}
         //c.listOfStudents[c.studentsInClass++] = Student({addr: msg.sender});
         c.studentsInClass ++;
-        studentList[studentWallet].numberOfClasses ++;
-        emit AttendanceRegistered(studentWallet, classID, now);
+        students[studentAddress].numberOfClasses ++;
+        emit AttendanceRegistered(studentAddress, classID, now);
         return true;
     }
     
-    function registerAttendanceForAStudent (uint256 studentID, uint256 classID) public returns(bool) {
+    function registerAttendanceForAStudent (address studentAddress, uint256 classID) public returns(bool) {
         require (msg.sender == schoolWallet);
         require (classes[classID].active == true);
-        students[studentID].numberOfClasses ++;
-        //classes.listaDePresenca.push = students[studentID].studentWallet;
-        emit AttendanceRegistered(students[studentID].studentWallet, classID, now);
+        students[studentAddress].numberOfClasses ++;
+        //classes.listaDePresenca.push = students[studentAddress].studentWallet;
+        emit AttendanceRegistered(studentAddress, classID, now);
         return true;
     }
     
-    function deleteAttendanceForAStudent (uint256 studentID, uint256 classID) public returns(bool) {
+    function deleteAttendance (address studentAddress, uint256 classID) public returns(bool) {
         require (msg.sender == schoolWallet);
-        students[studentID].numberOfClasses -= 1;
-        //classes.listaDePresenca.push = students[studentID].studentWallet;
+        students[studentAddress].numberOfClasses -= 1;
+        //classes.listaDePresenca.push = students[studentAddress].studentWallet;
         Class storage c = classes[classID];
         c.studentsInClass -= 1;
-        emit AttendanceDeleted(students[studentID].studentWallet, classID, now);
+        emit AttendanceDeleted(studentAddress, classID, now);
         return true;
     }
     
     function laurateStudents () public returns(bool)  { 
         require (msg.sender == schoolWallet);
-        for (uint i=0; i<students.length; i++) {
-            Student memory s = students[students.length-1];
-            if (students[students.length-1].numberOfClasses < minimumAchievement) {
+        for (uint i=0; i<studentsList.length; i++) {
+            Student memory s = studentsList[studentsList.length-1];
+            if (studentsList[studentsList.length-1].numberOfClasses < minimumAchievement) {
                 return false;
             }
-            if(students[students.length-1].numberOfClasses >= minimumAchievement){
-                students[students.length-1].evaluation = "Aprovado";
-                students[students.length-1].laurated = true;
-                emit StudentLaurated(courseName, students[students.length-1].nationalID , now);
+            if(studentsList[studentsList.length-1].numberOfClasses >= minimumAchievement){
+                studentsList[studentsList.length-1].evaluation = "Aprovado";
+                studentsList[studentsList.length-1].laurated = true;
+                studentsLaurated ++;
+                emit StudentLaurated(studentsList[studentsList.length-1].studentAddress, courseName, studentsList[studentsList.length-1].nationalID , now);
                 return true;
             }
         }
         laureated = true;
     }
     
-    function showDetails() public view returns (string memory, string memory, string memory, string memory, string memory, uint256, uint256, uint256, uint256) {
-        return(courseName, coordinatorName, local, startDate, finishDate, amountOfHours, totalOfClasses, minimumAchievement, numberOfStudents);
+    function showDetails() public view returns (string memory, string memory, string memory, string memory, string memory, uint256, uint256, uint256) {
+        return(courseName, coordinatorName, local, startDate, finishDate, amountOfHours, totalOfClasses, minimumAchievement);
     }
     
+    function showStatus() public view returns (uint256, uint256, uint256, uint256 ) {
+        return(numberOfStudents, classesCreated, classesFinished, studentsLaurated);
+    }
+        
     function showStudent(uint256 studentID) public view returns (address, string memory, uint256, uint256, string memory, bool, bool) {
-        Student memory s = students[studentID];
-        return(s.studentWallet, s.studentName, s.nationalID, s.numberOfClasses, s.evaluation, s.active, s.laurated);
+        Student memory s = studentsList[studentID];
+        return(s.studentAddress, s.studentName, s.nationalID, s.numberOfClasses, s.evaluation, s.active, s.laurated);
     }
     
     function showClass(uint256 classID) public view returns (string memory, string memory, uint256, uint256, uint256, uint256, bool) {
         Class memory c = classes[classID];
         return(c.className, c.professorName, c.classDate, c.classHours, c.password, c.studentsInClass, c.active);
-    }
-    
-    function studentStatus(address studentWallet) public view returns (address, string memory, uint256, uint256, string memory, bool, bool) {
-        require (msg.sender == studentList[studentWallet].studentWallet);
-        Student memory s = studentList[studentWallet];
-        return(s.studentWallet, s.studentName, s.nationalID, s.numberOfClasses, s.evaluation, s.active, s.laurated);
+        
     }
 }
