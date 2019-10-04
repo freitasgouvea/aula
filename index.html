@@ -138,11 +138,11 @@
 
         </section>
 
-        <div id="popup-basic" class="popup col-8 col-md-8">
+        <div id="popup-basic" class="popup col-10 col-md-10 text-white" style="background-color: #4f407b" data-position="bottom-center">
             <button type="button" class="close" data-dismiss="popup" aria-label="Close">
                 <span aria-hidden="true">×</span>
             </button>
-            <h4 class="text-center">Status do Registro</h4>
+            <h4 class="text-center">Confirme a operação no Metamask</h4>
             <br>
             <div class="alert" id="statusTransacao">&nbsp;</div>
         </div>
@@ -194,7 +194,7 @@
                     alert("Houve um erro ao registrar a sua presença, tente novamente.");
                     return
                 }
-                waitForTxToBeMined(resultado, "#statusTransacao");
+                waitForTxToBeMined("Status da Transação" + resultado, "#statusTransacao");
             })
         }
 
