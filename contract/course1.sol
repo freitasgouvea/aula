@@ -17,7 +17,7 @@ contract LaureaCourse {
     uint256 classesCreated;
     uint256 classesFinished;
     uint256 studentsLaurated;
-    bool laureated;
+    bool laurated;
     
     Student[] students;
     Class[] classes;
@@ -30,6 +30,7 @@ contract LaureaCourse {
         string evaluation;
         bool active;
         bool laurated;
+        bool publicCertificate;
     }
     
     struct Class {
@@ -53,11 +54,30 @@ contract LaureaCourse {
     event AttendanceDeleted(uint256 indexed studentID, uint256 indexed classID, uint256 now);
     event StudentLaurated(string indexed courseName, uint256 indexed nationalID, uint256 now);
     
-    constructor(string memory _schoolName, string memory _principalName ) public {
+    constructor(
+        string memory _schoolName, 
+        string memory _principalName, 
+        string memory _courseName,
+        string memory _coordinatorName,
+        string memory _local,
+        string memory _startDate,
+        string memory _finishDate,
+        uint256 _amountOfHours,
+        uint256 _numberOfClasses,
+        uint256 _minimumAchievement
+    ) public {
         schoolWallet = msg.sender;
         schoolName = _schoolName;
         principalName = _principalName;
-        laureated = false;
+        courseName = _courseName;
+        coordinatorName = _coordinatorName;
+        local = _local;
+        startDate = _startDate;
+        finishDate = _finishDate;
+        amountOfHours = _amountOfHours;
+        totalOfClasses = _numberOfClasses;
+        minimumAchievement = _minimumAchievement;
+        laurated = false;
     }
     
     function editCoursesDetails (
@@ -125,7 +145,7 @@ contract LaureaCourse {
         ) public returns (bool)
     {
         require (msg.sender == schoolWallet);
-        Student memory s = Student( _studentWallet, _studentName, _nationalID, 0, "0", true, false);
+        Student memory s = Student( _studentWallet, _studentName, _nationalID, 0, "0", true, false, false);
         students.push(s);
         numberOfStudents ++;
         emit StudentCreated(students.length-1, _nationalID, _studentName);
@@ -140,7 +160,7 @@ contract LaureaCourse {
         ) public returns (bool)
     {
         require (msg.sender == schoolWallet);
-        Student storage s = students[studentID];
+        Student memory s = students[studentID];
         s.studentWallet = _studentWallet;
         s.studentName = _studentName;
         s.nationalID = _nationalID;
@@ -200,7 +220,6 @@ contract LaureaCourse {
     function laurateStudents () public returns(bool)  { 
         require (msg.sender == schoolWallet);
         for (uint i=0; i<students.length; i++) {
-            Student memory s = students[students.length-1];
             if (students[students.length-1].numberOfClasses < minimumAchievement) {
                 return false;
             }
@@ -212,7 +231,23 @@ contract LaureaCourse {
                 return true;
             }
         }
-        laureated = true;
+        laurated = true;
+    }
+    
+    function anonymizeStudent(uint256 studentID) public returns(bool) {
+        require (msg.sender == schoolWallet);
+        require (students[studentID].laurated == true);
+        require (students[studentID].publicCertificate == true);
+        students[studentID].publicCertificate == false;
+        return true;
+    }
+    
+    function unanonymizeStudent(uint256 studentID) public returns(bool) {
+        require (msg.sender == schoolWallet);
+        require (students[studentID].laurated == true);
+        require (students[studentID].publicCertificate == false);
+        students[studentID].publicCertificate == true;
+        return true;
     }
     
     function showDetails() public view returns (string memory, string memory, string memory, string memory, string memory, uint256, uint256, uint256) {
@@ -220,10 +255,12 @@ contract LaureaCourse {
     }
     
     function showStatus() public view returns (uint256, uint256, uint256, uint256 ) {
+        require (msg.sender == schoolWallet);
         return(numberOfStudents, classesCreated, classesFinished, studentsLaurated);
     }
         
     function showStudent(uint256 studentID) public view returns (address, string memory, uint256, uint256, string memory, bool, bool) {
+        require (msg.sender == schoolWallet);
         Student memory s = students[studentID];
         return(s.studentWallet, s.studentName, s.nationalID, s.numberOfClasses, s.evaluation, s.active, s.laurated);
     }
@@ -231,6 +268,11 @@ contract LaureaCourse {
     function showClass(uint256 classID) public view returns (string memory, string memory, uint256, uint256, uint256, uint256, bool) {
         Class memory c = classes[classID];
         return(c.className, c.professorName, c.classDate, c.classHours, c.password, c.studentsInClass, c.active);
-        
+    }
+    
+    function showCertificate(uint256 studentID) public view returns (string memory, string memory) {
+        Student memory s = students[studentID];
+        require (students[studentID].publicCertificate == true);
+        return(s.studentName, s.evaluation);
     }
 }
