@@ -17,7 +17,7 @@ contract LaureaCourse {
     uint256 classesCreated;
     uint256 classesFinished;
     uint256 studentsLaurated;
-    bool laureated;
+    bool laurated;
     
     Student [] studentsList;
     Class[] classes;
@@ -32,6 +32,7 @@ contract LaureaCourse {
         string evaluation;
         bool active;
         bool laurated;
+        bool publicCertificate;
     }
     
     struct Class {
@@ -59,7 +60,7 @@ contract LaureaCourse {
         schoolWallet = msg.sender;
         schoolName = _schoolName;
         principalName = _principalName;
-        laureated = false;
+        laurated = false;
     }
     
     function editCoursesDetails (
@@ -230,12 +231,29 @@ contract LaureaCourse {
             if(studentsList[studentsList.length-1].numberOfClasses >= minimumAchievement){
                 studentsList[studentsList.length-1].evaluation = "Aprovado";
                 studentsList[studentsList.length-1].laurated = true;
+                studentsList[studentsList.length-1].publicCertificate = true;
                 studentsLaurated ++;
                 emit StudentLaurated(studentsList[studentsList.length-1].studentAddress, courseName, studentsList[studentsList.length-1].nationalID , now);
                 return true;
             }
         }
-        laureated = true;
+        laurated = true;
+    }
+    
+    function anonymizeStudent(address studentAddress) public returns(bool) {
+        require (msg.sender == students[studentAddress].studentAddress);
+        require (students[studentAddress].laurated == true);
+        require (students[studentAddress].publicCertificate == true);
+        students[studentAddress].publicCertificate == false;
+        return true;
+    }
+    
+    function unanonymizeStudent(address studentAddress) public returns(bool) {
+        require (msg.sender == students[studentAddress].studentAddress);
+        require (students[studentAddress].laurated == true);
+        require (students[studentAddress].publicCertificate == false);
+        students[studentAddress].publicCertificate == true;
+        return true;
     }
     
     function showDetails() public view returns (string memory, string memory, string memory, string memory, string memory, uint256, uint256, uint256) {
@@ -254,6 +272,12 @@ contract LaureaCourse {
     function showClass(uint256 classID) public view returns (string memory, string memory, uint256, uint256, uint256, uint256, bool) {
         Class memory c = classes[classID];
         return(c.className, c.professorName, c.classDate, c.classHours, c.password, c.studentsInClass, c.active);
-        
     }
+    
+    function showCertificate(address studentAddress) public view returns (string memory, string memory) {
+        Student memory s = students[studentAddress];
+        require (students[studentAddress].publicCertificate == true);
+        return(s.studentName, s.evaluation);
+    }
+
 }
