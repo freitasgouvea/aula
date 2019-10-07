@@ -56,10 +56,29 @@ contract LaureaCourse {
     event AttendanceDeleted(address indexed studentAddress, uint256 indexed classID, uint256 now);
     event StudentLaurated(address indexed studentAddress, string indexed courseName, uint256 indexed nationalID, uint256 now);
     
-    constructor(string memory _schoolName, string memory _principalName ) public {
+    constructor(
+        string memory _schoolName, 
+        string memory _principalName, 
+        string memory _courseName,
+        string memory _coordinatorName,
+        string memory _local,
+        string memory _startDate,
+        string memory _finishDate,
+        uint256 _amountOfHours,
+        uint256 _numberOfClasses,
+        uint256 _minimumAchievement
+    ) public {
         schoolWallet = msg.sender;
         schoolName = _schoolName;
         principalName = _principalName;
+        courseName = _courseName;
+        coordinatorName = _coordinatorName;
+        local = _local;
+        startDate = _startDate;
+        finishDate = _finishDate;
+        amountOfHours = _amountOfHours;
+        totalOfClasses = _numberOfClasses;
+        minimumAchievement = _minimumAchievement;
         laurated = false;
     }
     
