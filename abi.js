@@ -1,4 +1,4 @@
-const contractABI = [
+const contractABI = 	[
 	{
 		"constant": false,
 		"inputs": [
@@ -92,6 +92,27 @@ const contractABI = [
 		"inputs": [
 			{
 				"internalType": "uint256",
+				"name": "studentID",
+				"type": "uint256"
+			}
+		],
+		"name": "anonymizeStudent",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
 				"name": "classID",
 				"type": "uint256"
 			}
@@ -154,6 +175,27 @@ const contractABI = [
 		],
 		"name": "editCoursesDetails",
 		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "studentID",
+				"type": "uint256"
+			}
+		],
+		"name": "unanonymizeStudent",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -418,6 +460,32 @@ const contractABI = [
 		"type": "function"
 	},
 	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "studentID",
+				"type": "uint256"
+			}
+		],
+		"name": "showCertificate",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"constant": false,
 		"inputs": [
 			{
@@ -536,6 +604,46 @@ const contractABI = [
 				"internalType": "string",
 				"name": "_principalName",
 				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_courseName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_coordinatorName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_local",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_startDate",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_finishDate",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amountOfHours",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_numberOfClasses",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_minimumAchievement",
+				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -746,9 +854,9 @@ const contractABI = [
 ]
 
 if (network === "4") {
-    contractAddress = "0xECC37147552b68C7025a2d1779a84ab0B52e29d0"; 
+    contractAddress = "0x2724439C6260fb7220cc829938E22E9B8fd839Bc"; 
 } else {
-    contractAddress = "0xECC37147552b68C7025a2d1779a84ab0B52e29d0"; 
+    contractAddress = "0x2724439C6260fb7220cc829938E22E9B8fd839Bc"; 
 }
 
 contract = web3.eth.contract(contractABI).at(contractAddress);
