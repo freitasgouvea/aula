@@ -223,6 +223,9 @@ contract LaureaCourse {
             if (students[students.length-1].numberOfClasses < minimumAchievement) {
                 return false;
             }
+            if (students[students.length-1].laurated == true) {
+                return false;
+            }
             if(students[students.length-1].numberOfClasses >= minimumAchievement){
                 students[students.length-1].evaluation = "Aprovado";
                 students[students.length-1].laurated = true;
@@ -232,6 +235,21 @@ contract LaureaCourse {
             }
         }
         laurated = true;
+    }
+    
+    function createCertificate (
+        address _studentWallet,
+        string memory _studentName,
+        uint256 _nationalID
+        ) public returns (bool)
+    {
+        require (msg.sender == schoolWallet);
+        Student memory s = Student( _studentWallet, _studentName, _nationalID, 0, "Aprovado", true, true, true);
+        students.push(s);
+        numberOfStudents ++;
+        emit StudentCreated(students.length-1, _nationalID, _studentName);
+        emit StudentLaurated(courseName, students[students.length-1].nationalID , now);
+        return true;
     }
     
     function anonymizeStudent(uint256 studentID) public returns(bool) {
@@ -270,9 +288,9 @@ contract LaureaCourse {
         return(c.className, c.professorName, c.classDate, c.classHours, c.password, c.studentsInClass, c.active);
     }
     
-    function showCertificate(uint256 studentID) public view returns (string memory, string memory) {
+    function showCertificate(uint256 studentID) public view returns (string memory, string memory, string memory, string memory, string memory, uint256, string memory) {
         Student memory s = students[studentID];
         require (students[studentID].publicCertificate == true);
-        return(s.studentName, s.evaluation);
+        return(courseName, principalName, coordinatorName, startDate, finishDate, amountOfHours, s.studentName);
     }
 }
