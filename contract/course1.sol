@@ -1,5 +1,7 @@
 pragma solidity 0.5.11.;
 
+pragma experimental ABIEncoderV2;
+
 contract LaureaCourse {
     
     address schoolWallet;
@@ -188,10 +190,6 @@ contract LaureaCourse {
         require (classes[classID].active == true);
         require (classes[classID].password == _password);
         Class storage c = classes[classID];
-        //if(students[studentID] = classes[classID].listaDePresenca) {
-                //return false;
-            //}
-        //c.listOfStudents[c.studentsInClass++] = Student({addr: msg.sender});
         c.studentsInClass ++;
         students[studentID].numberOfClasses ++;
         emit AttendanceRegistered(studentID, classID, now);
@@ -202,7 +200,6 @@ contract LaureaCourse {
         require (msg.sender == schoolWallet);
         require (classes[classID].active == true);
         students[studentID].numberOfClasses ++;
-        //classes.listaDePresenca.push = students[studentID].studentWallet;
         emit AttendanceRegistered(studentID, classID, now);
         return true;
     }
@@ -210,7 +207,6 @@ contract LaureaCourse {
     function deleteAttendance (uint256 studentID, uint256 classID) public returns(bool) {
         require (msg.sender == schoolWallet);
         students[studentID].numberOfClasses -= 1;
-        //classes.listaDePresenca.push = students[studentID].studentWallet;
         Class storage c = classes[classID];
         c.studentsInClass -= 1;
         emit AttendanceDeleted(studentID, classID, now);
@@ -252,7 +248,8 @@ contract LaureaCourse {
         return true;
     }
     
-    function anonymizeStudent(uint256 studentID) public returns(bool) {
+    function anonymizeStudent(uint256 studentID) public returns(bool) 
+    {
         require (msg.sender == schoolWallet);
         require (students[studentID].laurated == true);
         require (students[studentID].publicCertificate == true);
@@ -260,7 +257,8 @@ contract LaureaCourse {
         return true;
     }
     
-    function unanonymizeStudent(uint256 studentID) public returns(bool) {
+    function unanonymizeStudent(uint256 studentID) public returns(bool) 
+    {
         require (msg.sender == schoolWallet);
         require (students[studentID].laurated == true);
         require (students[studentID].publicCertificate == false);
@@ -283,14 +281,59 @@ contract LaureaCourse {
         return(s.studentWallet, s.studentName, s.nationalID, s.numberOfClasses, s.evaluation, s.active, s.laurated);
     }
     
+    
+    function getStudentList() public view returns (address[] memory, string[] memory,uint256[] memory)
+    {
+        address[] memory studentWallet = new address[](students.length);
+        string[] memory studentName = new string[](students.length);
+        uint256[] memory nationalID = new uint256[](students.length);
+        for (uint i = 0; i < students.length; i++) {
+            Student storage student = students[i];
+            studentWallet[i] = student.studentWallet;
+            studentName[i] = student.studentName;
+            nationalID[i] = student.nationalID;
+        }
+        return (studentWallet, studentName, nationalID);
+    }
+    
     function showClass(uint256 classID) public view returns (string memory, string memory, uint256, uint256, uint256, uint256, bool) {
         Class memory c = classes[classID];
         return(c.className, c.professorName, c.classDate, c.classHours, c.password, c.studentsInClass, c.active);
+    }
+    
+    function getClassList() public view returns (string[] memory, string[] memory,uint256[] memory)
+    {
+        string[] memory className = new string[](classes.length);
+        string[] memory professorName = new string[](classes.length);
+        uint256[] memory classDate = new uint256[](classes.length);
+        for (uint i = 0; i < classes.length; i++) {
+            Class storage class = classes[i];
+            className[i] = class.className;
+            professorName[i] = class.professorName;
+            classDate[i] = class.classDate;
+        }
+        return (className, professorName, classDate);
     }
     
     function showCertificate(uint256 studentID) public view returns (string memory, string memory, string memory, string memory, string memory, uint256, string memory) {
         Student memory s = students[studentID];
         require (students[studentID].publicCertificate == true);
         return(courseName, principalName, coordinatorName, startDate, finishDate, amountOfHours, s.studentName);
+    }
+    
+    function getCertificateList() public view returns (address[] memory, string[] memory,uint256[] memory)
+    {
+        address[] memory studentWallet = new address[](students.length);
+        string[] memory studentName = new string[](students.length);
+        uint256[] memory nationalID = new uint256[](students.length);
+        bool[] memory publicCertificate = new bool[] (students.length);
+        for (uint i = 0; i < students.length; i++) {
+            Student storage student = students[i];
+            require( publicCertificate[i] == true);
+            studentWallet[i] = student.studentWallet;
+            studentName[i] = student.studentName;
+            nationalID[i] = student.nationalID;
+        }
+        return (studentWallet, studentName, nationalID);
     }
 }
