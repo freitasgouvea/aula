@@ -233,7 +233,7 @@ contract LaureaCourse {
         laurated = true;
     }
     
-    function createCertificate (
+    function addCertificate (
         address _studentWallet,
         string memory _studentName,
         uint256 _nationalID
@@ -282,7 +282,7 @@ contract LaureaCourse {
     }
     
     
-    function getStudentList() public view returns (address[] memory, string[] memory,uint256[] memory)
+    function getStudentList() public view returns (string[] memory,uint256[] memory, address[] memory)
     {
         address[] memory studentWallet = new address[](students.length);
         string[] memory studentName = new string[](students.length);
@@ -293,7 +293,7 @@ contract LaureaCourse {
             studentName[i] = student.studentName;
             nationalID[i] = student.nationalID;
         }
-        return (studentWallet, studentName, nationalID);
+        return (studentName, nationalID, studentWallet);
     }
     
     function showClass(uint256 classID) public view returns (string memory, string memory, uint256, uint256, uint256, uint256, bool) {
@@ -321,7 +321,7 @@ contract LaureaCourse {
         return(courseName, principalName, coordinatorName, startDate, finishDate, amountOfHours, s.studentName);
     }
     
-    function getCertificateList() public view returns (address[] memory, string[] memory,uint256[] memory)
+    function getCertificateList() public view returns (string[] memory,uint256[] memory, address[] memory)
     {
         address[] memory studentWallet = new address[](students.length);
         string[] memory studentName = new string[](students.length);
@@ -334,6 +334,6 @@ contract LaureaCourse {
             studentName[i] = student.studentName;
             nationalID[i] = student.nationalID;
         }
-        return (studentWallet, studentName, nationalID);
+        return (studentName, nationalID, studentWallet);
     }
 }
