@@ -189,6 +189,7 @@ contract LaureaCourse {
         require (msg.sender == students[studentID].studentWallet);
         require (classes[classID].active == true);
         require (classes[classID].password == _password);
+        
         Class storage c = classes[classID];
         c.studentsInClass ++;
         students[studentID].numberOfClasses ++;
