@@ -71,7 +71,7 @@
                             class="fas fa-check-square text-success"></i></span>
                     <br>
                     <br>
-                    <h2>Registre a sua presença.</h2>
+                    <h2>Registre sua presença</h2>
                     <hr>
                     <p class="lead">Sua presença será armazenada no Blockchain.</p>
                 </header>
@@ -180,26 +180,6 @@
     <script src="connectToSmartContract.js"></script>
     <script src="abi.js"></script>
     <script>
-
-        //web3.eth.getAccounts(accounts => console.log(accounts[0]));
-        //var studentWallet = web3.eth.accounts[0];
-
-        function getWeb3(callback) {
-            if (typeof window.web3 === 'undefined') {
-                // no web3, use fallback
-                console.error("Por favor, intale o aplicativo metamask para usar este serviço.");
-            } else {
-                // window.web3 == web3 most of the time. Don't override the provided,
-                // web3, just wrap it in your Web3.
-                var myWeb3 = new Web3(window.web3.currentProvider);
-
-                // the default account doesn't seem to be persisted, copy it to our
-                // new instance
-                myWeb3.eth.defaultAccount = window.web3.eth.defaultAccount;
-
-                callback(myWeb3);
-            }
-        }
 
         var frmRegistro = document.formRegistro;
 
