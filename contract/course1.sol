@@ -43,7 +43,7 @@ contract LaureaCourse {
         uint256 password;
         uint256 studentsInClass;
         bool active;
-        //mapping (uint => Student) listOfStudents;
+        bool finished;
     }
     
     event ClassCreated(uint256 indexed classID, string indexed className);
@@ -113,7 +113,7 @@ contract LaureaCourse {
         ) public returns (bool)
     {
         require (msg.sender == schoolWallet);
-        Class memory c = Class(_className, _professorName, _classDate, _classHours, _password, 0, false);
+        Class memory c = Class(_className, _professorName, _classDate, _classHours, _password, 0, false, false);
         classes.push(c);
         classesCreated ++;
         emit ClassCreated(classes.length-1, _className);
@@ -180,6 +180,11 @@ contract LaureaCourse {
     function closeClass (uint256 classID) public returns(bool) {
         require (msg.sender == schoolWallet);
         classes[classID].active = false;
+        if (classes[classID].finished = true) {
+            emit ClassClosed(classID, now);
+            return true;
+        }
+        classes[classID].finished = true;
         classesFinished ++;
         emit ClassClosed(classID, now);
         return true;
@@ -297,9 +302,9 @@ contract LaureaCourse {
         return (studentName, nationalID, studentWallet);
     }
     
-    function showClass(uint256 classID) public view returns (string memory, string memory, uint256, uint256, uint256, uint256, bool) {
+    function showClass(uint256 classID) public view returns (string memory, string memory, uint256, uint256, uint256, uint256, bool, bool) {
         Class memory c = classes[classID];
-        return(c.className, c.professorName, c.classDate, c.classHours, c.password, c.studentsInClass, c.active);
+        return(c.className, c.professorName, c.classDate, c.classHours, c.password, c.studentsInClass, c.active, c.finished);
     }
     
     function getClassList() public view returns (string[] memory, string[] memory,uint256[] memory)
